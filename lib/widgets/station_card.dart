@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:v_lille/models/station.dart';
 
 import 'package:v_lille/utils/colors.dart';
-import 'package:v_lille/widgets/station_popup.dart';
 
 /// Station json example
 /// "@id": "1",
@@ -21,23 +20,17 @@ import 'package:v_lille/widgets/station_popup.dart';
 
 class StationCard extends StatelessWidget {
   final Station station;
+  final VoidCallback onStationTapped;
 
-  const StationCard({super.key, required this.station});
+  const StationCard(
+      {super.key, required this.station, required this.onStationTapped});
 
   @override
   Widget build(BuildContext context) {
     return Ink(
       child: InkWell(
         splashColor: primaryColor.withOpacity(0.5),
-        onTap: () {
-          // Show a pop-up with the station details
-          showDialog(
-            context: context,
-            builder: (context) {
-              return StationPopup(station: station);
-            },
-          );
-        },
+        onTap: onStationTapped,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -48,7 +41,7 @@ class StationCard extends StatelessWidget {
           padding: const EdgeInsets.only(left: 4, right: 4, top: 10, bottom: 5),
           child: Column(
             children: [
-              // Station name and color based on connection status
+              // Station name and connection state (red for disconnected, green for connected)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -67,7 +60,8 @@ class StationCard extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 10), // Spacing between elements
+              const SizedBox(height: 10),
+              // Station address
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -88,6 +82,8 @@ class StationCard extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 5),
+              // Number of bikes present / number of bikes possible (available slots + available bikes)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
