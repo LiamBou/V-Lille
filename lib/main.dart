@@ -36,15 +36,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<Station>> futureStation;
+  MapScreenState? mapScreenState;
 
   @override
   void initState() {
     super.initState();
-
     futureStation = fetchStations();
   }
 
   Future<List<Station>> fetchStations() async {
+    // Fetch the station data from the API
     // https://data.lillemetropole.fr/data/ogcapi/collections/vlille_temps_reel/items?f=geojson&limit=-1
     var uri = Uri.https(
         'data.lillemetropole.fr',
@@ -52,14 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
         {'f': 'json', 'limit': '-1'});
     final response = await http.get(uri);
     if (response.statusCode == 200) {
+      // Decode the response to avoid any encoding issues
       final jsonResponse =
           json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      // The records are the stations
       final records = jsonResponse['records'];
       if (records.isNotEmpty) {
-        /*setState(() {
-          stations = List<Station>.from(records.map(
-              (record) => Station.fromJson(record as Map<String, dynamic>)));
-        });*/
         return List<Station>.from(records
             .map((record) => Station.fromJson(record as Map<String, dynamic>)));
       } else {
@@ -87,14 +86,26 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (builder, snapshot) {
               if (snapshot.hasData) {
                 return IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white),
-                  onPressed: () => showSearch(
-                    context: context,
-                    delegate: StationSearchDelegate(
-                        stations: snapshot.data as List<Station>),
-                  ),
-                );
+                    icon: const Icon(Icons.search, color: Colors.white),
+                    onPressed: () {
+                      List<Station> stations = snapshot.data as List<Station>;
+                      // Show the search delegate
+                      showSearch(
+                        context: context,
+                        delegate: StationSearchDelegate(
+                          stations: stations,
+                          onStationTapped: (station) {
+                            // Trigger the map to zoom into the selected station
+                            if (mapScreenState != null) {
+                              mapScreenState!.onMarkerTapped(station);
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        ),
+                      );
+                    });
               } else {
+                // Show a dialog if the data is not loaded yet; shouldn't happen if the API is up and the user has an internet connection
                 return IconButton(
                   icon: const Icon(Icons.search, color: Colors.white),
                   onPressed: () => showDialog(
@@ -130,13 +141,23 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+      // Show the map screen with the stations once the data is loaded
       body: FutureBuilder(
         future: futureStation,
         builder: (builder, snapshot) {
           if (snapshot.hasData) {
-            return MapScreen(stations: snapshot.data as List<Station>);
+            return MapScreen(
+              stations: snapshot.data as List<Station>,
+              onMapCreated: (state) {
+                mapScreenState = state; // Assign the map screen state
+              },
+            );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            // Show a loading indicator while the data is being fetched
+            return const Center(
+                child: CircularProgressIndicator(
+              color: secondaryColor,
+            ));
           }
         },
       ),

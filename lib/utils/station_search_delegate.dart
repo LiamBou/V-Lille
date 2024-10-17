@@ -3,9 +3,12 @@ import 'package:v_lille/models/station.dart';
 import 'package:v_lille/widgets/station_list.dart';
 
 class StationSearchDelegate extends SearchDelegate {
-  StationSearchDelegate({required this.stations});
-
   final List<Station> stations;
+  final Function(Station) onStationTapped;
+
+  StationSearchDelegate(
+      {required this.onStationTapped, required this.stations});
+
   List<Station> results = <Station>[];
 
   @override
@@ -27,7 +30,10 @@ class StationSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) => results.isEmpty
       ? const Center(child: Text('No results found'))
-      : StationList(stations: results);
+      : StationList(
+          stations: results,
+          onStationTapped: onStationTapped,
+        );
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -38,6 +44,9 @@ class StationSearchDelegate extends SearchDelegate {
 
     return results.isEmpty
         ? const Center(child: Text('No results found'))
-        : StationList(stations: results);
+        : StationList(
+            stations: results,
+            onStationTapped: onStationTapped,
+          );
   }
 }

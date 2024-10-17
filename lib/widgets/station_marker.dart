@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:v_lille/models/station.dart';
 import 'package:v_lille/utils/colors.dart';
 
-class StationMarker extends StatelessWidget {
+// Marker for a station
+class StationMarker extends Marker {
   final Station station;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  const StationMarker({
-    super.key,
-    required this.station,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Icon(
-        Icons.directions_bike,
-        color: station.connectionState == "CONNECTÉ"
-            ? primaryColor
-            : secondaryColor,
-        size: isSelected ? 40 : 30, // Increase size when selected
-      ),
-    );
-  }
+  StationMarker({required this.station, this.onTap})
+      : super(
+          alignment: Alignment.center,
+          point: LatLng(station.y, station.x),
+          child: GestureDetector(
+            onTap: onTap,
+            child: const Icon(
+              Icons.directions_bike_outlined,
+              size: 30,
+              color: primaryColor,
+            ),
+          ),
+        );
 }
