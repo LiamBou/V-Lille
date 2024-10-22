@@ -3,7 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:v_lille/models/station.dart';
+import 'package:v_lille/models/station_model.dart';
 import 'package:v_lille/utils/colors.dart';
+import 'package:v_lille/utils/favorite_controller.dart';
 import 'package:v_lille/widgets/station_bubble.dart';
 import 'package:v_lille/widgets/station_marker.dart';
 
@@ -120,6 +122,8 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 if (marker is StationMarker) {
                   return StationBubble(
                     station: marker.station,
+                    stationModel: StationModel(),
+                    favoriteController: FavoriteController(),
                   );
                 }
                 return const Card(child: Text('Not a station'));

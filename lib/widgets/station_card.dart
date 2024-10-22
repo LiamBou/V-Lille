@@ -43,17 +43,22 @@ class StationCard extends StatelessWidget {
             children: [
               // Station name and connection state (red for disconnected, green for connected)
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    station.name,
-                    style: const TextStyle(
-                      color: primaryColor,
+                  Expanded(
+                    child: Text(
+                      station.name,
+                      style: const TextStyle(
+                        color: primaryColor,
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30),
-                    child: Icon(Icons.wifi,
+                    child: Icon(
+                        station.connectionState == "CONNECTÉ"
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
                         color: station.connectionState == "CONNECTÉ"
                             ? greenColor
                             : secondaryColor),

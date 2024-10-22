@@ -1,13 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:v_lille/models/station.dart';
+import 'package:v_lille/models/station_model.dart';
 import 'package:v_lille/utils/colors.dart';
+import 'package:v_lille/utils/favorite_controller.dart';
 import 'package:v_lille/utils/station_search_delegate.dart';
 import 'package:http/http.dart' as http;
 import 'package:v_lille/views/map_screen.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -37,11 +40,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late Future<List<Station>> futureStation;
   MapScreenState? mapScreenState;
+  late FavoriteController favoriteController;
 
   @override
   void initState() {
     super.initState();
     futureStation = fetchStations();
+    favoriteController = Get.put(FavoriteController());
   }
 
   Future<List<Station>> fetchStations() async {
@@ -59,6 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // The records are the stations
       final records = jsonResponse['records'];
       if (records.isNotEmpty) {
+        StationModel.stations = List<Station>.from(records
+            .map((record) => Station.fromJson(record as Map<String, dynamic>)));
         return List<Station>.from(records
             .map((record) => Station.fromJson(record as Map<String, dynamic>)));
       } else {
@@ -101,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.of(context).pop();
                             }
                           },
+                          favoriteController: favoriteController,
                         ),
                       );
                     });
