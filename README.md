@@ -1,4 +1,4 @@
-# v_lille
+# V'Lille Flutter App
 
 A Flutter application that allows users to easily locate a place where they can obtain or return a bike in Lille using the open data portal of MEL, which provides data on V'Lille stations.
 
@@ -10,7 +10,7 @@ This project is a starting point for a Flutter application.
 
 - Flutter SDK: [Install Flutter](https://flutter.dev/docs/get-started/install)
 - Dart SDK: Included with Flutter
-- Android Studio: [Download Android Studio](https://developer.android.com/studio)
+- Android Studio: Recommended for development, [Download Android Studio](https://developer.android.com/studio)
 
 ### Installation
 
@@ -39,16 +39,16 @@ This project is a starting point for a Flutter application.
 
 ## Features
 
-1. Fetching Real-Time Data: 
-   - The application fetches real-time data of V'Lille stations using the MEL open data portal. This is done through the `StationApiInterface` class, which makes HTTP requests to retrieve station data.
-2. Displaying Stations on a Map:
-    - The application displays the fetched stations on a map. This is handled in the `MapScreen` widget, which uses the `flutter_map` package to render the map and markers for each station.
-3. Search Functionality:
-    - Users can search for specific stations using a search bar. The search functionality is implemented using the `StationSearchDelegate` class, which allows users to search and select stations.
-4. Favorite Stations:
-    - Users can mark stations as favorites. The favorite status is preserved even when the station data is refreshed. This is managed in the `refreshStations` method of the `StationApiInterface` class, which ensures that the favorite status is not lost during data updates.
-5. Local Database Storage:
-    - The application uses a local database to store station data. This is managed by the `StationDatabaseInterface` class, which handles inserting and updating station records in the database.
+1. **Fetching Real-Time Data**: 
+- The application fetches real-time data of V'Lille stations using the MEL open data portal. This is done through the `StationApiInterface` class, which makes HTTP requests to retrieve station data.
+2. **Displaying Stations on a Map**:
+- The application displays the fetched stations on a map. This is handled in the `MapScreen` widget, which uses the `flutter_map` package to render the map and markers for each station.
+3. **Search Functionality**:
+- Users can search for specific stations using a search bar. The search functionality is implemented using the `StationSearchDelegate` class, which allows users to search and select stations.
+4. **Favorite Stations**:
+- Users can mark stations as favorites (*isFavorite* attribut on the database). The favorite status is preserved even when the station data is refreshed. This is managed in the `refreshStations` method of the `StationApiInterface` class, which ensures that the favorite status is not lost during data updates.
+5. **Local Database Storage**:
+- The application uses a local database to store station data. This is managed by the `StationDatabaseInterface` class, which handles inserting and updating station records in the database.
 
 ## Dependencies
 
