@@ -3,9 +3,9 @@
     "short_name": "v_lille",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "Application flutter permettant à un usager de facilement localiser un lieu où il pourra obtenir ou rendre un vélo en libre service à Lille en utilisant le portail open data de la MEL qui fournit des données "en temps-réel"",
+    "background_color": "#hexcode",
+    "theme_color": "#hexcode",
+    "description": "Flutter app to display the V'Lille stations on a map",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

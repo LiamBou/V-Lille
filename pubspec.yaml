@@ -1,5 +1,5 @@
 name: v_lille
-description: "Application flutter permettant à un usager de facilement localiser un lieu où il pourra obtenir ou rendre un vélo en libre service à Lille en utilisant le portail open data de la MEL qui fournit des données \"en temps-réel\""
+description: "Flutter app to display the V'Lille stations on a map"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.1 <4.0.0'
+  sdk: '>=3.5.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,8 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
@@ -39,17 +37,41 @@ dependencies:
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
   flutter_map_marker_popup: ^7.0.0
+  get: ^4.6.6
+  sqflite: ^2.4.0
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.2
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/app_logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "lib/assets/app_logo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "lib/assets/app_logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "lib/assets/app_logo.png"
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

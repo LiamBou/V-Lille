@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:v_lille/models/station.dart';
 import 'package:v_lille/utils/colors.dart';
+import 'package:v_lille/utils/station_database_interface.dart';
 
-class StationBubble extends StatelessWidget {
+class StationBubble extends StatefulWidget {
   final Station station;
 
-  const StationBubble({super.key, required this.station});
+  const StationBubble({
+    super.key,
+    required this.station,
+  });
 
+  @override
+  State<StationBubble> createState() => _StationBubbleState();
+}
+
+class _StationBubbleState extends State<StationBubble> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +42,7 @@ class StationBubble extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  station.name,
+                  widget.station.name,
                   style: const TextStyle(
                     color: primaryColor,
                     fontWeight: FontWeight.bold,
@@ -41,11 +50,12 @@ class StationBubble extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.wifi,
-                color: station.connectionState == "CONNECTÉ"
-                    ? greenColor
-                    : secondaryColor,
-              ),
+                  widget.station.connectionState == "CONNECTÉ"
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  color: widget.station.connectionState == "CONNECTÉ"
+                      ? greenColor
+                      : secondaryColor)
             ],
           ),
           const SizedBox(height: 5),
@@ -56,7 +66,7 @@ class StationBubble extends StatelessWidget {
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
-                  station.address.toUpperCase(),
+                  widget.station.address.toUpperCase(),
                   style: const TextStyle(color: primaryColor),
                 ),
               ),
@@ -68,15 +78,19 @@ class StationBubble extends StatelessWidget {
             children: [
               Icon(
                 Icons.directions_bike_outlined,
-                color: (station.availableSlots + station.availableBikes) == 0
+                color: (widget.station.availableSlots +
+                            widget.station.availableBikes) ==
+                        0
                     ? secondaryColor
                     : greenColor,
               ),
               const SizedBox(width: 5),
               Text(
-                "${station.availableBikes} / ${(station.availableSlots + station.availableBikes)}",
+                "${widget.station.availableBikes} / ${(widget.station.availableSlots + widget.station.availableBikes)}",
                 style: TextStyle(
-                  color: (station.availableSlots + station.availableBikes) == 0
+                  color: (widget.station.availableSlots +
+                              widget.station.availableBikes) ==
+                          0
                       ? secondaryColor
                       : greenColor,
                 ),
@@ -89,7 +103,8 @@ class StationBubble extends StatelessWidget {
             children: [
               const Icon(Icons.credit_score, color: primaryColor),
               const SizedBox(width: 5),
-              Text(station.type, style: const TextStyle(color: primaryColor)),
+              Text(widget.station.type,
+                  style: const TextStyle(color: primaryColor)),
             ],
           ),
           const SizedBox(height: 5),
@@ -98,12 +113,33 @@ class StationBubble extends StatelessWidget {
             children: [
               const Icon(Icons.update, color: primaryColor),
               const SizedBox(width: 5),
-              Text(
-                station.lastUpdate,
-                style: const TextStyle(color: primaryColor),
+              Expanded(
+                child: Text(
+                  widget.station.lastUpdate,
+                  style: const TextStyle(color: primaryColor),
+                ),
               ),
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      widget.station.toggleFavorite();
+                    });
+                    await StationDatabaseInterface.instance
+                        .insertStation(widget.station);
+                  },
+                  // Check if the station is a favorite to display the right icon
+                  icon: Icon(
+                      widget.station.isFavoriteStation()
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: secondaryColor))
+            ],
+          )
         ],
       ),
     );

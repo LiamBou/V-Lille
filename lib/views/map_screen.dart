@@ -52,7 +52,7 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     );
     // Hide all popups except the one corresponding to the tapped marker and move the map to its position
     _popupLayerController.hidePopupsWhere((marker) => marker != tappedMarker);
-    _popupLayerController.togglePopup(tappedMarker);
+    _popupLayerController.showPopupsOnlyFor([tappedMarker]);
     _animatedMapMove(position, 15);
   }
 
@@ -94,6 +94,11 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.stations.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return FlutterMap(
       mapController: _mapController,
       // The map options are used to set the initial center of the map to the center of Lille

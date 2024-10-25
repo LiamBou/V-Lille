@@ -24,13 +24,15 @@ if (flutterVersionName == null) {
 }
 
 android {
+    //ndkVersion = "25.1.8937393"
+
     namespace = "com.example.v_lille"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     defaultConfig {
@@ -42,6 +44,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {

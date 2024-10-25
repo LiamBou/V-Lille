@@ -1,13 +1,14 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:v_lille/models/station.dart';
 import 'package:v_lille/utils/colors.dart';
+import 'package:v_lille/utils/station_api_interface.dart';
 import 'package:v_lille/utils/station_search_delegate.dart';
-import 'package:http/http.dart' as http;
 import 'package:v_lille/views/map_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -41,36 +42,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    futureStation = fetchStations();
-  }
-
-  Future<List<Station>> fetchStations() async {
-    // Fetch the station data from the API
-    // https://data.lillemetropole.fr/data/ogcapi/collections/vlille_temps_reel/items?f=geojson&limit=-1
-    var uri = Uri.https(
-        'data.lillemetropole.fr',
-        '/data/ogcapi/collections/vlille_temps_reel/items',
-        {'f': 'json', 'limit': '-1'});
-    final response = await http.get(uri);
-    if (response.statusCode == 200) {
-      // Decode the response to avoid any encoding issues
-      final jsonResponse =
-          json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      // The records are the stations
-      final records = jsonResponse['records'];
-      if (records.isNotEmpty) {
-        return List<Station>.from(records
-            .map((record) => Station.fromJson(record as Map<String, dynamic>)));
-      } else {
-        throw Exception('No records found');
-      }
-    } else {
-      throw Exception('Failed to load station');
-    }
+    futureStation = StationApiInterface.instance.fetchStations();
   }
 
   @override
   Widget build(BuildContext context) {
+    // List<Station>? stations = context.watch<StationProvider>().stationList;
     return Scaffold(
       backgroundColor: primaryColor,
       appBar: AppBar(

@@ -6,8 +6,10 @@ class StationSearchDelegate extends SearchDelegate {
   final List<Station> stations;
   final Function(Station) onStationTapped;
 
-  StationSearchDelegate(
-      {required this.onStationTapped, required this.stations});
+  StationSearchDelegate({
+    required this.onStationTapped,
+    required this.stations,
+  });
 
   List<Station> results = <Station>[];
 
