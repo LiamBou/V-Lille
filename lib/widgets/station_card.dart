@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:v_lille/models/station.dart';
-
 import 'package:v_lille/utils/colors.dart';
+import 'package:v_lille/utils/station_database_interface.dart';
 
-/// Station json example
-/// "@id": "1",
-//       "nom": "METROPOLE EUROPEENNE DE LILLE",
-//       "adresse": "MEL RUE DU BALLON",
-//       "code_insee": null,
-//       "commune": "LILLE",
-//       "etat": "RÉFORMÉ",
-//       "type": "AVEC TPE",
-//       "nb_places_dispo": 0,
-//       "nb_velos_dispo": 0,
-//       "etat_connexion": "DÉCONNECTÉ",
-//       "x": 3.075992,
-//       "y": 50.641926,
-//       "date_modification": "2022-11-29T10:47:16.181+00:00"
-
-class StationCard extends StatelessWidget {
+class StationCard extends StatefulWidget {
   final Station station;
   final VoidCallback onStationTapped;
 
-  const StationCard(
-      {super.key, required this.station, required this.onStationTapped});
+  const StationCard({
+    super.key,
+    required this.station,
+    required this.onStationTapped,
+  });
 
+  @override
+  State<StationCard> createState() => _StationCardState();
+}
+
+class _StationCardState extends State<StationCard> {
   @override
   Widget build(BuildContext context) {
     return Ink(
       child: InkWell(
         splashColor: primaryColor.withOpacity(0.5),
-        onTap: onStationTapped,
+        onTap: widget.onStationTapped,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -47,7 +40,7 @@ class StationCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      station.name,
+                      widget.station.name,
                       style: const TextStyle(
                         color: primaryColor,
                       ),
@@ -56,10 +49,10 @@ class StationCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 30),
                     child: Icon(
-                        station.connectionState == "CONNECTÉ"
+                        widget.station.connectionState == "CONNECTÉ"
                             ? Icons.radio_button_checked
                             : Icons.radio_button_unchecked,
-                        color: station.connectionState == "CONNECTÉ"
+                        color: widget.station.connectionState == "CONNECTÉ"
                             ? greenColor
                             : secondaryColor),
                   )
@@ -79,7 +72,7 @@ class StationCard extends StatelessWidget {
                     child: Container(
                       constraints: const BoxConstraints(maxWidth: 230),
                       child: Text(
-                        station.address.toUpperCase(),
+                        widget.station.address.toUpperCase(),
                         style: const TextStyle(color: primaryColor),
                         textAlign: TextAlign.center,
                       ),
@@ -90,27 +83,54 @@ class StationCard extends StatelessWidget {
               const SizedBox(height: 5),
               // Number of bikes present / number of bikes possible (available slots + available bikes)
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.directions_bike_outlined,
-                    color:
-                        (station.availableSlots + station.availableBikes) == 0
-                            ? secondaryColor
-                            : greenColor,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "${station.availableBikes} / ${(station.availableSlots + station.availableBikes)}",
-                    style: TextStyle(
-                      color:
-                          (station.availableSlots + station.availableBikes) == 0
-                              ? secondaryColor
-                              : greenColor,
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 55),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.directions_bike_outlined,
+                            color: (widget.station.availableSlots +
+                                        widget.station.availableBikes) ==
+                                    0
+                                ? secondaryColor
+                                : greenColor,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            "${widget.station.availableBikes} / ${(widget.station.availableSlots + widget.station.availableBikes)}",
+                            style: TextStyle(
+                              color: (widget.station.availableSlots +
+                                          widget.station.availableBikes) ==
+                                      0
+                                  ? secondaryColor
+                                  : greenColor,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.station.toggleFavorite();
+                        StationDatabaseInterface.instance
+                            .updateStation(widget.station);
+                      });
+                    },
+                    icon: Icon(
+                      widget.station.isFavoriteStation()
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: secondaryColor,
+                    ),
+                  ),
                 ],
-              ),
+              )
             ],
           ),
         ),

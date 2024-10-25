@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:v_lille/models/station.dart';
-import 'package:v_lille/utils/favorite_controller.dart';
 import 'package:v_lille/widgets/station_list.dart';
 
 class StationSearchDelegate extends SearchDelegate {
   final List<Station> stations;
   final Function(Station) onStationTapped;
-  final FavoriteController favoriteController;
 
-  StationSearchDelegate(
-      {required this.onStationTapped,
-      required this.stations,
-      required this.favoriteController});
+  StationSearchDelegate({
+    required this.onStationTapped,
+    required this.stations,
+  });
 
   List<Station> results = <Station>[];
 
@@ -37,7 +35,6 @@ class StationSearchDelegate extends SearchDelegate {
       : StationList(
           stations: results,
           onStationTapped: onStationTapped,
-          favoriteController: favoriteController,
         );
 
   @override
@@ -52,7 +49,6 @@ class StationSearchDelegate extends SearchDelegate {
         : StationList(
             stations: results,
             onStationTapped: onStationTapped,
-            favoriteController: favoriteController,
           );
   }
 }

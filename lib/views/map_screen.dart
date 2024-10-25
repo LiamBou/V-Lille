@@ -3,9 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:v_lille/models/station.dart';
-import 'package:v_lille/models/station_model.dart';
 import 'package:v_lille/utils/colors.dart';
-import 'package:v_lille/utils/favorite_controller.dart';
 import 'package:v_lille/widgets/station_bubble.dart';
 import 'package:v_lille/widgets/station_marker.dart';
 
@@ -54,7 +52,7 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     );
     // Hide all popups except the one corresponding to the tapped marker and move the map to its position
     _popupLayerController.hidePopupsWhere((marker) => marker != tappedMarker);
-    _popupLayerController.togglePopup(tappedMarker);
+    _popupLayerController.showPopupsOnlyFor([tappedMarker]);
     _animatedMapMove(position, 15);
   }
 
@@ -96,6 +94,11 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.stations.isEmpty) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return FlutterMap(
       mapController: _mapController,
       // The map options are used to set the initial center of the map to the center of Lille
@@ -122,8 +125,6 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 if (marker is StationMarker) {
                   return StationBubble(
                     station: marker.station,
-                    stationModel: StationModel(),
-                    favoriteController: FavoriteController(),
                   );
                 }
                 return const Card(child: Text('Not a station'));

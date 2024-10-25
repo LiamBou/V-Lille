@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:v_lille/models/station.dart';
-import 'package:v_lille/models/station_model.dart';
 import 'package:v_lille/utils/colors.dart';
-import 'package:v_lille/utils/favorite_controller.dart';
+import 'package:v_lille/utils/station_database_interface.dart';
 
 class StationBubble extends StatefulWidget {
   final Station station;
-  final StationModel stationModel;
-  final FavoriteController favoriteController;
 
-  const StationBubble(
-      {super.key,
-      required this.station,
-      required this.stationModel,
-      required this.favoriteController});
+  const StationBubble({
+    super.key,
+    required this.station,
+  });
 
   @override
   State<StationBubble> createState() => _StationBubbleState();
@@ -129,15 +125,16 @@ class _StationBubbleState extends State<StationBubble> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
-                      widget.stationModel.toggleFavorite(widget.station);
-                      widget.favoriteController.toggleFavorite(widget.station);
+                      widget.station.toggleFavorite();
                     });
+                    await StationDatabaseInterface.instance
+                        .insertStation(widget.station);
                   },
                   // Check if the station is a favorite to display the right icon
                   icon: Icon(
-                      widget.stationModel.isFavorite(widget.station)
+                      widget.station.isFavoriteStation()
                           ? Icons.favorite
                           : Icons.favorite_border,
                       color: secondaryColor))
