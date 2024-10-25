@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:v_lille/models/station.dart';
 import 'package:http/http.dart' as http;
 import 'package:v_lille/utils/station_database_interface.dart';
@@ -9,12 +8,14 @@ class StationApiInterface {
 
   StationApiInterface._internal();
 
+  // Fetch the stations from the API
   Future<List<Station>> fetchStations() async {
     final response = await http.get(Uri.parse(
         'https://data.lillemetropole.fr/data/ogcapi/collections/vlille_temps_reel/items?f=json&limit=-1'));
     if (response.statusCode == 200) {
       final jsonResponse =
           json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      // Take the part of the response that contains the station's data
       final stations = jsonResponse['records'];
       if (stations.isNotEmpty) {
         // Fetch the stations from the API
@@ -33,6 +34,7 @@ class StationApiInterface {
     }
   }
 
+  // Refresh the stations in the database
   Future<void> refreshStations() async {
     List<Station> fetchedStations = await fetchStations();
     List<Station> existingStations =

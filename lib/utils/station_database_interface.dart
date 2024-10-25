@@ -9,6 +9,8 @@ class StationDatabaseInterface {
   static Database? _database;
   StationDatabaseInterface._internal();
 
+  // Database constants
+
   static const String databaseName = 'station.db';
 
   static const int versionNumber = 2;
@@ -37,11 +39,8 @@ class StationDatabaseInterface {
   }
 
   _initDatabase() async {
-    // Set the path to the database. Note: Using the `join` function from the
-    // `path` package is best practice to ensure the path is correctly
-    // constructed for each platform.
     String path = join(await getDatabasesPath(), databaseName);
-    // When the database is first created, create a table to store Notes.
+    // When the database is first created, create a table to store Stations
     var db = await openDatabase(
       path,
       version: versionNumber,
@@ -69,6 +68,7 @@ class StationDatabaseInterface {
     ''');
   }
 
+  // Upgrade the database by dropping the existing tables and creating new ones if the version number is increased
   _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
       await db.execute('''
@@ -81,6 +81,8 @@ class StationDatabaseInterface {
       await _onCreate(db, newVersion);
     }
   }
+
+  // CRUD operations
 
   Future<int> insertStation(Station station) async {
     final db = await database;

@@ -3,6 +3,8 @@ import 'package:v_lille/models/station.dart';
 import 'package:v_lille/widgets/station_list.dart';
 
 class StationSearchDelegate extends SearchDelegate {
+  // Class managing the search bar
+
   final List<Station> stations;
   final Function(Station) onStationTapped;
 

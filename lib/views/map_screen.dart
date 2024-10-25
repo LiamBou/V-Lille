@@ -28,6 +28,7 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _mapController = MapController();
+    // Create a marker for each station
     _markers = widget.stations
         .map(
           (station) => StationMarker(
@@ -43,7 +44,7 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     });
   }
 
-  // Method to zoom and center the map when a marker is tapped
+  // Method to zoom, center the map and show the popup with the station's details if not currently showed when a marker is tapped
   void onMarkerTapped(Station station) {
     final LatLng position = LatLng(station.y, station.x);
     // Find the marker corresponding to the tapped station
@@ -94,6 +95,7 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // Display a loading indicator if the stations are not loaded yet
     if (widget.stations.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(),
@@ -115,7 +117,7 @@ class MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           userAgentPackageName: 'com.example.app',
         ),
-        // The PopupMarkerLayer is responsible for displaying the popups
+        // The PopupMarkerLayer responsible for displaying the popups
         PopupMarkerLayer(
           options: PopupMarkerLayerOptions(
             popupController: _popupLayerController,

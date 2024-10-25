@@ -3,6 +3,7 @@ import 'package:v_lille/models/station.dart';
 import 'package:v_lille/utils/colors.dart';
 import 'package:v_lille/widgets/station_card.dart';
 
+// StationList is a widget that displays a list of stations
 class StationList extends StatefulWidget {
   final List<Station> stations;
   final Function(Station) onStationTapped;

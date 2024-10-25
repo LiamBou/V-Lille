@@ -3,6 +3,7 @@ import 'package:v_lille/models/station.dart';
 import 'package:v_lille/utils/colors.dart';
 import 'package:v_lille/utils/station_database_interface.dart';
 
+// StationCard is a widget that displays a station's information in a card format (for the search results and favorite stations)
 class StationCard extends StatefulWidget {
   final Station station;
   final VoidCallback onStationTapped;
@@ -23,6 +24,7 @@ class _StationCardState extends State<StationCard> {
     return Ink(
       child: InkWell(
         splashColor: primaryColor.withOpacity(0.5),
+        // When the card is tapped, the onStationTapped callback is called (to go back to the map and display the station's popup)
         onTap: widget.onStationTapped,
         child: Container(
           decoration: BoxDecoration(
@@ -114,6 +116,7 @@ class _StationCardState extends State<StationCard> {
                       ),
                     ),
                   ),
+                  // Favorite button, changes the station's favorite status when tapped
                   IconButton(
                     onPressed: () {
                       setState(() {

@@ -3,6 +3,7 @@ import 'package:v_lille/models/station.dart';
 import 'package:v_lille/utils/colors.dart';
 import 'package:v_lille/utils/station_database_interface.dart';
 
+// StationBubble is a widget that displays a station's information in a bubble (for the map popups)
 class StationBubble extends StatefulWidget {
   final Station station;
 
