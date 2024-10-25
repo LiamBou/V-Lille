@@ -1,4 +1,7 @@
 # V'Lille Flutter App
+<p align="center">
+  <img src="https://github.com/LiamBou/V_Lille/blob/main/lib/assets/banner.png" alt="Presentation Image"/>
+</p>
 
 A Flutter application that allows users to easily locate a place where they can obtain or return a bike in Lille using the open data portal of MEL, which provides data on V'Lille stations.
 
